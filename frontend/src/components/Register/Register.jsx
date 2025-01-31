@@ -69,7 +69,7 @@ const Register = () => {
           <img src="https://readymadeui.com/signin-image.webp" className="lg:max-w-[85%] w-full h-full object-contain block mx-auto" alt="login-image" />
         </div>
 
-        <div className="flex items-center md:p-8 p-6 bg-[#0C172C] h-full lg:w-11/12 lg:ml-auto">
+        <div className="flex items-center md:p-8 p-6 bg-[#0C172C] h-full lg:w-11/12 lg:ml-auto rounded-tl-[55px] rounded-bl-[55px]">
           <form className="max-w-lg w-full mx-auto" onSubmit={handleSubmit}>
             <div className="mb-12">
               <h3 className="text-3xl font-bold text-yellow-400">Create an account</h3>

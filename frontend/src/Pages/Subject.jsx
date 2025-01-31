@@ -1,7 +1,7 @@
 // SubjectList.jsx
 import React from "react";
 
-const studentsData = [
+const subjectData = [
   { id: "ST123456", name: "John Doe", class: "Grade 3", subjects: ["Mathematics", "Science", "English"] },
   { id: "ST123457", name: "Alice Smith", class: "Grade 2", subjects: ["History", "Art", "Music"] },
   { id: "ST123458", name: "James Brown", class: "Grade 4", subjects: ["Physics", "Chemistry", "Biology"] },
@@ -38,7 +38,7 @@ const SubjectList = () => {
           </tr>
         </thead>
         <tbody>
-          {studentsData.map((student) => (
+          {subjectData.map((student) => (
             <tr key={student.id}>
               <td className="px-4 py-2 border">{student.id}</td>
               <td className="px-4 py-2 border">{student.name}</td>

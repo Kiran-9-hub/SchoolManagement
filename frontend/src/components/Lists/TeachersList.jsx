@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { teachersData } from "../../libs/teachersList";
+import axios from 'axios'
 import { FaRegEye, FaSearch } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoMdOptions } from "react-icons/io";
@@ -8,6 +9,32 @@ import { IoMdAdd } from "react-icons/io";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
 function TeachersList() {
+  const [teachersData, setTeachersData] = useState([])
+
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+        const token = localStorage.getItem("token"); // Retrieve token from localStorage
+        if (!token) {
+            console.error("No token found. Please log in.");
+            return;
+        }
+
+        try {
+            const response = await axios.get("http://127.0.0.1:5000/teacher/all/teachers", {
+                headers: {
+                    Authorization: token, // Include token in headers
+                },
+            });
+            setTeachersData(response.data.teachers);
+        } catch (error) {
+            console.error("Error fetching teachers:", error.message);
+        }
+    };
+
+    fetchData();
+}, []);
+  
   return (
     <div className="overflow-x-auto  bg-[#1E1E1E] p-6 rounded-lg shadow-lg mb-32">
       {/* Headers */}
@@ -222,7 +249,7 @@ function TeachersList() {
                 <div className="flex items-center gap-3">
                   <div className="avatar">
                     <div className="mask mask-squircle h-12 w-12">
-                      <img src={teacher.photo} alt="profile pic" />
+                      {/* <img src={teacher.photo} alt="profile pic" /> */}
                     </div>
                   </div>
                   <div>
