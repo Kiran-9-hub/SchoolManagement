@@ -16,6 +16,9 @@ import Classes from './Pages/Classes'
 import Dashboard from './Pages/Dashboard'
 import Carousel from './components/Carousel/Carousel'
 import ForgotPassword from './components/forgotpassword/ForgotPassword'
+import About from './components/about/About'
+import Contact from './components/contact/Contact'
+
 
 
 
@@ -76,6 +79,15 @@ const App = () => {
           path:"/forgot-password",
           element:<ForgotPassword/>
         },
+        {
+          path:"/about",
+          element:<About/>
+        },
+        {
+          path:"/contact",
+          element:<Contact/>
+        }
+        
         
        
        
@@ -89,6 +101,7 @@ const App = () => {
       path:"/register",
       element:<Register/>
     }
+    
    
 
   ])

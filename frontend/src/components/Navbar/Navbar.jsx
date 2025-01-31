@@ -1,9 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  // Check login status when the component mounts
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true); // User is logged in
+    }
+  }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    // Remove token and userRole from localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+
+    // Update the state to reflect the logged-out status
+    setIsLoggedIn(false);
+
+    // Redirect to the login page after logout
+    navigate("/home");
+  };
+
   return (
-    <div className=" w-[100%] bg-[#111827] shadow h-16 flex items-center justify-between px-4">
+    <div className="w-[100%] bg-[#111827] shadow h-16 flex items-center justify-between px-4">
       <div className="flex-1"></div>
 
       <form className="flex items-center max-w-lg w-full">
@@ -77,9 +101,22 @@ const Navbar = () => {
       </form>
 
       <div className="flex-1 flex justify-end">
-        <button type="button" className="py-2 px-4 text-l font-medium text-white bg-green-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" > 
-          <Link to="/login">Login</Link>
-        </button>
+        {isLoggedIn ? (
+          <button
+            onClick={handleLogout} // Trigger the logout functionality
+            type="button"
+            className="py-2 px-4 text-l font-medium text-white bg-green-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="py-2 px-4 text-l font-medium text-white bg-green-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            <Link to="/login">Login</Link>
+          </button>
+        )}
       </div>
     </div>
   );

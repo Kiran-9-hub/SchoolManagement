@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify'; // Import ToastContainer
+import { toast, ToastContainer } from 'react-toastify';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('admin');
+  const [role, setRole] = useState(localStorage.getItem("userRole") || 'admin'); // Default to 'admin' if no role is stored
   const [error, setError] = useState('');
+
+  // Save selected role to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem("userRole", role);
+  }, [role]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,7 +33,11 @@ const Login = () => {
 
       if (response.status === 200) {
         toast.success(`${role.charAt(0).toUpperCase() + role.slice(1)} login successful!`);
-        localStorage.setItem('token', response.data.token);
+        
+        // Store user details
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userRole", role); // Store role properly
+        
         navigate(`/${role}`);
       }
     } catch (err) {
@@ -38,7 +47,7 @@ const Login = () => {
 
   return (
     <div className="relative w-full h-screen bg-gradient-to-r from-blue-500 to-indigo-700">
-      <video 
+       <video 
         autoPlay 
         muted 
         loop 
@@ -69,7 +78,6 @@ const Login = () => {
         transition={{ duration: 1.5 }}
         className="absolute bottom-10 right-10 w-16"
       />
-
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         initial={{ opacity: 0 }}
@@ -78,26 +86,16 @@ const Login = () => {
       >
         <motion.form
           onSubmit={handleLogin}
-          className="w-full max-w-md bg-white bg-opacity-90 p-8 rounded-xl shadow-lg"
+          className="w-full max-w-md bg-gradient-to-r from-pink-200 to-amber-100 bg-opacity-90 p-8 rounded-xl shadow-lg"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1.2 }}
         >
-          <motion.h2
-            className="text-3xl font-bold mb-6 text-center text-gray-800"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-          >
+          <motion.h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
             Login
           </motion.h2>
 
-          <motion.div 
-            className="mb-4" 
-            initial={{ x: -50, opacity: 0 }} 
-            animate={{ x: 0, opacity: 1 }} 
-            transition={{ duration: 1 }}
-          >
+          <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Role</label>
             <select
               value={role}
@@ -108,14 +106,9 @@ const Login = () => {
               <option value="teacher">Teacher</option>
               <option value="student">Student</option>
             </select>
-          </motion.div>
+          </div>
 
-          <motion.div 
-            className="mb-4" 
-            initial={{ x: 50, opacity: 0 }} 
-            animate={{ x: 0, opacity: 1 }} 
-            transition={{ duration: 1.2 }}
-          >
+          <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Email</label>
             <input
               type="email"
@@ -124,14 +117,9 @@ const Login = () => {
               className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
             />
-          </motion.div>
+          </div>
 
-          <motion.div 
-            className="mb-4" 
-            initial={{ x: -50, opacity: 0 }} 
-            animate={{ x: 0, opacity: 1 }} 
-            transition={{ duration: 1.4 }}
-          >
+          <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Password</label>
             <input
               type="password"
@@ -140,18 +128,9 @@ const Login = () => {
               className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
             />
-          </motion.div>
+          </div>
 
-          {error && (
-            <motion.p
-              className="text-red-500 text-sm mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-            >
-              {error}
-            </motion.p>
-          )}
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
           <motion.button
             type="submit"
@@ -161,7 +140,6 @@ const Login = () => {
           >
             Login
           </motion.button>
-
           <motion.div
             className="mt-4 text-center"
             initial={{ opacity: 0 }}

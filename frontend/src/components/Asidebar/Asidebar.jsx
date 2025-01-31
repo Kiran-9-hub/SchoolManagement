@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoIosHome } from "react-icons/io";
 import { GiTeacher } from "react-icons/gi";
 import { PiStudentBold } from "react-icons/pi";
@@ -15,14 +15,75 @@ import { RiMessage2Fill } from "react-icons/ri";
 import { NavLink } from "react-router-dom";
 
 const Asidebar = () => {
+  const [userRole, setUserRole] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // On component mount, check if user is logged in and their role
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("userRole");
+
+    if (token && role) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+    }
+  }, []);
+
+  const adminLinks = [
+    { to: "/lists/teachers", icon: <GiTeacher />, label: "Teachers" },
+    { to: "/lists/students", icon: <PiStudentBold />, label: "Students" },
+    { to: "/lists/parents", icon: <RiParentFill />, label: "Parents" },
+    { to: "/subjects", icon: <MdSubject />, label: "Subjects" },
+    { to: "/classes", icon: <SiGoogleclassroom />, label: "Classes" },
+    { to: "/exams", icon: <PiExamFill />, label: "Exams" },
+    { to: "/results", icon: <FaPercentage />, label: "Results" },
+    { to: "/attendance", icon: <SiBasicattentiontoken />, label: "Attendance" },
+    { to: "/events", icon: <MdEmojiEvents />, label: "Events" },
+    { to: "/messages", icon: <RiMessage2Fill />, label: "Messages" }
+  ];
+
+  const teacherLinks = [
+    { to: "/subjects", icon: <MdSubject />, label: "Subjects" },
+    { to: "/classes", icon: <SiGoogleclassroom />, label: "Classes" },
+    { to: "/lessons", icon: <MdPlayLesson />, label: "Lessons" },
+    { to: "/exams", icon: <PiExamFill />, label: "Exams" },
+    { to: "/results", icon: <FaPercentage />, label: "Results" },
+    { to: "/attendance", icon: <SiBasicattentiontoken />, label: "Attendance" },
+    { to: "/assignments", icon: <MdAssignmentAdd />, label: "Assignments" }
+  ];
+
+  const studentLinks = [
+    { to: "/lessons", icon: <MdPlayLesson />, label: "Lessons" },
+    { to: "/exams", icon: <PiExamFill />, label: "Exams" },
+    { to: "/results", icon: <FaPercentage />, label: "Results" },
+    { to: "/attendance", icon: <SiBasicattentiontoken />, label: "Attendance" },
+    { to: "/assignments", icon: <MdAssignmentAdd />, label: "Assignments" }
+  ];
+
+  const commonLinks = [
+    { to: "/home", icon: <IoIosHome />, label: "Home" }
+  ];
+
+  const renderLinks = () => {
+    switch (userRole) {
+      case "admin":
+        return adminLinks;
+      case "teacher":
+        return teacherLinks;
+      case "student":
+        return studentLinks;
+      default:
+        return [];
+    }
+  };
+
   return (
     <div>
       <aside
         id="default-sidebar"
         className="fixed top-0 left-0 z-40 w-[16%] h-full transition-transform -translate-x-full sm:translate-x-0"
-        
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-[#111827]">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-[#111827] border-r border-gray-200 dark:border-gray-800">
           {/* Image at the top */}
           <div className="flex justify-center mb-0">
             <img
@@ -33,127 +94,59 @@ const Asidebar = () => {
           </div>
 
           <ul className="space-y-2 font-medium">
-            <li>
-              <NavLink
-                to="/home"
-                className="flex items-center p-2 mt-10 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <IoIosHome />
-                <span className="flex-1 ms-3 whitespace-nowrap">Home</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/lists/teachers"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <GiTeacher />
-                <span className="flex-1 ms-3 whitespace-nowrap">Teachers</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/lists/students"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <PiStudentBold />
-                <span className="flex-1 ms-3 whitespace-nowrap">Students</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/lists/parents"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <RiParentFill />
-                <span className="flex-1 ms-3 whitespace-nowrap">Parents</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/subjects"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdSubject />
-                <span className="flex-1 ms-3 whitespace-nowrap">Subjects</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/classes"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <SiGoogleclassroom />
-                <span className="flex-1 ms-3 whitespace-nowrap">Classes</span>
-              </NavLink>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdPlayLesson />
-                <span className="flex-1 ms-3 whitespace-nowrap">Lessons</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <PiExamFill />
-                <span className="flex-1 ms-3 whitespace-nowrap">Exams</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdAssignmentAdd />
-                <span className="flex-1 ms-3 whitespace-nowrap">
-                  Assignments
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <FaPercentage />
-                <span className="flex-1 ms-3 whitespace-nowrap">Results</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <SiBasicattentiontoken />
-                <span className="flex-1 ms-3 whitespace-nowrap">
-                  Attendance
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdEmojiEvents />
-                <span className="flex-1 ms-3 whitespace-nowrap">Events</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <RiMessage2Fill />
-                <span className="flex-1 ms-3 whitespace-nowrap">Messages</span>
-              </a>
-            </li>
+            {/* Always visible links */}
+            {commonLinks.map((link) => (
+              <li key={link.to}>
+                <NavLink
+                  to={link.to}
+                  className="flex items-center p-2 mt-10 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  {link.icon}
+                  <span className="flex-1 ms-3 whitespace-nowrap">{link.label}</span>
+                </NavLink>
+              </li>
+            ))}
+
+            {/* Conditional Links based on the login state and role */}
+            {isLoggedIn && renderLinks().map((link) => (
+              <li key={link.to}>
+                <NavLink
+                  to={link.to}
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  {link.icon}
+                  <span className="flex-1 ms-3 whitespace-nowrap">{link.label}</span>
+                </NavLink>
+              </li>
+            ))}
+
+            {/* Links visible when not logged in */}
+            <ul>
+  {/* Conditional rendering of the "About" menu item */}
+  {!isLoggedIn && (
+    <li>
+      <NavLink
+        to="/about"
+        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+      >
+        <MdAssignmentAdd />
+        <span className="flex-1 ms-3 whitespace-nowrap">About</span>
+      </NavLink>
+    </li>
+  )}
+
+  {/* Static "About" menu item (visible regardless of login state) */}
+  <li>
+    <NavLink
+      to="/contact"
+      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-400 group "
+    >
+      <MdAssignmentAdd />
+      <span className="flex-1 ms-3 whitespace-nowrap">Contact</span>
+    </NavLink>
+  </li>
+</ul>
+
           </ul>
         </div>
       </aside>

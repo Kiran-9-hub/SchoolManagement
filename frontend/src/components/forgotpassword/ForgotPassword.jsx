@@ -92,10 +92,10 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-r from-blue-500 to-indigo-700 flex items-center justify-center">
+    <div className="relative w-full h-screen bg-gradient-to-r from-pink-200 to-amber-200 flex items-center justify-center">
       <motion.form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white bg-opacity-90 p-8 rounded-xl shadow-lg"
+        className="w-full max-w-md bg-white bg-opacity-90 p-8 rounded-xl shadow-lg bg-gradient-to-r from-pink-200 to-amber-200"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -115,6 +115,7 @@ const ForgotPassword = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
+          
         >
           {step === 1 && (
             <>
@@ -130,7 +131,7 @@ const ForgotPassword = () => {
                   <option value="student">Student</option>
                 </select>
               </div>
-              <div className="mb-4">
+              <div className="mb-4 ">
                 <label className="block text-sm font-medium mb-2">Email</label>
                 <input
                   type="email"
