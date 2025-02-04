@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { teachersData } from "../../libs/teachersList";
-import axios from 'axios'
+import axios from 'axios';
 import { FaRegEye, FaSearch } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoMdOptions } from "react-icons/io";
@@ -9,34 +8,36 @@ import { IoMdAdd } from "react-icons/io";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
 function TeachersList() {
-  const [teachersData, setTeachersData] = useState([])
+  const [teachersData, setTeachersData] = useState([]);
 
   // Fetch data
   useEffect(() => {
     const fetchData = async () => {
-        const token = localStorage.getItem("token"); // Retrieve token from localStorage
-        if (!token) {
-            console.error("No token found. Please log in.");
-            return;
-        }
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      console.log("Retrieved token:", token);
+      if (!token) {
+        console.error("No token found. Please log in.");
+        return;
+      }
 
-        try {
-            const response = await axios.get("http://127.0.0.1:5000/teacher/all/teachers", {
-                headers: {
-                    Authorization: token, // Include token in headers
-                },
-            });
-            setTeachersData(response.data.teachers);
-        } catch (error) {
-            console.error("Error fetching teachers:", error.message);
-        }
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/admin/all/teacher", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+        setTeachersData(response.data.teachers);
+      } catch (error) {
+        console.error("Error fetching teachers:", error.response?.data || error.message);
+      }
     };
 
     fetchData();
-}, []);
-  
+  }, []);
+
   return (
-    <div className="overflow-x-auto  bg-[#1E1E1E] p-6 rounded-lg shadow-lg mb-32">
+    <div className="overflow-x-auto bg-[#1E1E1E] p-6 rounded-lg shadow-lg mb-32">
       {/* Headers */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
         <h1 className="text-3xl font-bold text-white">All Teachers</h1>
@@ -61,14 +62,13 @@ function TeachersList() {
             <button className="h-10 w-10 flex justify-center items-center bg-purple-500 text-white rounded-full hover:bg-purple-600 transition">
               <IoMdAdd
                 className="text-2xl"
-                onClick={() =>
-                  document.getElementById("my_modal_3").showModal()
-                }
+                onClick={() => document.getElementById("my_modal_3").showModal()}
               />
             </button>
           </div>
         </div>
       </div>
+
       {/* Modal */}
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box bg-[#2A2A2A] text-white">
@@ -79,116 +79,62 @@ function TeachersList() {
           </form>
           <div className="flex items-center justify-center bg-gray-900">
             <div className="p-6 bg-gray-800 shadow-md rounded-md w-full max-w-4xl">
-              <h3 className="font-bold text-3xl mb-6 text-center text-gray-500 ">
+              <h3 className="font-bold text-3xl mb-6 text-center text-gray-500">
                 Add a New Teacher
               </h3>
               <form className="space-y-6">
                 {/* Username, Email, Password */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white">
-                      Username
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border bg-white placeholder:text-black border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter Name"
-                    />
+                    <label className="block text-sm font-medium mb-1 text-white">Username</label>
+                    <input type="text" className="w-full border bg-white placeholder:text-black border-gray-300 rounded-md p-2 text-black" placeholder="Enter Name" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter email"
-                    />
+                    <label className="block text-sm font-medium mb-1 text-white">Email</label>
+                    <input type="email" className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter email" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter password"
-                    />
+                    <label className="block text-sm font-medium mb-1 text-white">Password</label>
+                    <input type="password" className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter password" />
                   </div>
                 </div>
 
                 {/* First Name, Last Name, Phone */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter First Name"
-                    />
+                    <label className="block text-sm font-medium mb-1">First Name</label>
+                    <input type="text" className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter First Name" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black "
-                      placeholder="Enter Last Name"
-                    />
+                    <label className="block text-sm font-medium mb-1">Last Name</label>
+                    <input type="text" className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter Last Name" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter Number"
-                    />
+                    <label className="block text-sm font-medium mb-1">Phone</label>
+                    <input type="tel" className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter Number" />
                   </div>
                 </div>
 
                 {/* Address, Blood Group, Birthday */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Address
-                    </label>
-                    <textarea
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter Address"
-                    ></textarea>
+                    <label className="block text-sm font-medium mb-1">Address</label>
+                    <textarea className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter Address"></textarea>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white">
-                      Blood Group
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black"
-                      placeholder="Enter Bgroup"
-                    />
+                    <label className="block text-sm font-medium mb-1 text-white">Blood Group</label>
+                    <input type="text" className="w-full border placeholder:text-black bg-white border-gray-300 rounded-md p-2 text-black" placeholder="Enter Bgroup" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white">
-                      Birthday
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full border text-black bg-white border-gray-300 rounded-md p-2 "
-                    />
+                    <label className="block text-sm font-medium mb-1 text-white">Birthday</label>
+                    <input type="date" className="w-full border text-black bg-white border-gray-300 rounded-md p-2" />
                   </div>
                 </div>
 
                 {/* Gender, Upload Photo */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white ">
-                      Gender
-                    </label>
+                    <label className="block text-sm font-medium mb-1 text-white">Gender</label>
                     <select className="w-full border border-gray-300 rounded-md p-2 bg-white text-black">
                       <option value="">Select</option>
                       <option value="male">Male</option>
@@ -198,14 +144,9 @@ function TeachersList() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1 text-white">
-                      Upload File
-                    </label>
+                    <label className="block text-sm font-medium mb-1 text-white">Upload File</label>
                     <div className="flex items-center gap-4">
-                      <label
-                        htmlFor="file-upload"
-                        className="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-                      >
+                      <label htmlFor="file-upload" className="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
                         <FaCloudUploadAlt className="inline-block mr-2 text-xl" />
                         Choose
                       </label>
@@ -215,10 +156,7 @@ function TeachersList() {
                 </div>
 
                 {/* Create Button */}
-                <button
-                  type="submit"
-                  className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-                >
+                <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
                   Create
                 </button>
               </form>
@@ -226,6 +164,7 @@ function TeachersList() {
           </div>
         </div>
       </dialog>
+
       {/* Table */}
       <table className="table-auto w-full text-white">
         {/* Head */}
@@ -241,10 +180,7 @@ function TeachersList() {
         </thead>
         <tbody>
           {teachersData.map((teacher) => (
-            <tr
-              key={teacher.id}
-              className="hover:bg-[#323232] transition duration-150"
-            >
+            <tr key={teacher.id} className="hover:bg-[#323232] transition duration-150">
               <td className="px-4 py-3">
                 <div className="flex items-center gap-3">
                   <div className="avatar">

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Admin from "../model/admin.model.js"
 import student from "../model/student.model.js";
 import teacher from "../model/teacher.model.js";
@@ -180,11 +181,6 @@ export const getAllStudents = async (req, res) => {
 export const getAllTeachers = async (req, res) => {
     try {
         const { id } = req.body; // Consider using req.params or req.headers for security
-
-        // Validate admin ID
-        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "Invalid admin ID" });
-        }
 
         // Authenticate admin
         const isAdmin = await Admin.findById(id);

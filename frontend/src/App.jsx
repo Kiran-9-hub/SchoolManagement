@@ -41,11 +41,11 @@ const App = () => {
           element:<Admin/>
         },
         {
-          path:"/lists/students",
+          path:"/student",
           element:<Students/>
         },
         {
-          path:"/student",
+          path:"/lists/students",
           element:<StudentList/>
         },
         {
@@ -57,11 +57,11 @@ const App = () => {
           element:<ParentList/>
         },
         {
-          path:"/lists/teachers",
+          path:"/teacher",
           element:<Teachers/>
         },
         {
-          path:"/teacher",
+          path:"/lists/teachers",
           element:<TeachersList/>
         },
         {
